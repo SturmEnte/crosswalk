@@ -1,3 +1,8 @@
+/* TBD
+  - Register button presses but execute them when the time is right 
+
+*/
+
 const int BUTTON = A3;
 
 const int PED_GREEN = 2;
@@ -12,7 +17,7 @@ const int RED_TIME = 5000;
 const int TIME_BETWEEN_PRESSES = 10000;
 
 unsigned long nextPress = 0;
-int buttonValue = HIGH;
+bool pressed = false;
 
 void setup() {
   for(int i = PED_GREEN; i <= CAR_RED; i++) {
@@ -25,9 +30,11 @@ void setup() {
 }
 
 void loop() {
-  buttonValue = digitalRead(BUTTON);
+  if(digitalRead(BUTTON) == LOW) {
+    pressed = true;
+  }
   
-  if(buttonValue == LOW && nextPress <= millis()) {
+  if(pressed && nextPress <= millis()) {
     
     digitalWrite(CAR_GREEN, LOW);
     digitalWrite(CAR_YELLOW, HIGH);
@@ -49,5 +56,6 @@ void loop() {
     digitalWrite(CAR_GREEN, HIGH);
     
     nextPress = millis() + TIME_BETWEEN_PRESSES;
+    pressed = false;
   }
 }
